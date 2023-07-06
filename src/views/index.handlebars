@@ -1,0 +1,22 @@
+{{!-- // 10. saludar desde index.handlebars --}}
+<div>
+   {{!--  clase 10.6 -- limpio el indexxx 
+            <h1>Hola {{name}}</h1> 
+               //22 actualizar plantilla segun si es admnin o no 
+            {{#if isAdmin}}
+                {{#each foods}}
+                    <div>
+                        <p>{{this.name}}</p>
+                        <p>{{this.price}}</p>
+                    </div>
+                {{/each}}
+            {{else }} 
+                <p>no tienes permisos para ver la lista de precios</p>
+            {{/if}}
+     --}}
+     <p>Todo ok para trabajar con websockets</p>
+</div>
+{{!-- clase 10.7 agregar script para relacioanr con socket --}}
+<script src="/socket.io/socket.io.js"></script>
+{{!-- clase 9 agregar script para relacioanr con javascrit: index.js --}}
+<script src="/js/index.js"></script>
