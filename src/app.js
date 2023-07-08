@@ -18,12 +18,15 @@ import mongoose from "mongoose";
 import  _dirname from "./utils.js";
 //import ProductManager from "../managers/productmanager.js";
 import ProductManager from "./dao/mongo/manager/products.js";
+import MessageManager from "./dao/mongo/manager/messages.js";
 const productos = new ProductManager()
+const mgs = new MessageManager()
 
 // 29. import router
 import router from "./routes/views.router.js";
 import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
+import messagesRouter from "./routes/messages.router.js";
 
 // clase 10.2 
 import { Server } from "socket.io";
@@ -43,6 +46,7 @@ app.use(express.static(_dirname+ "/public"))
 app.use('/',router) // ruta
 app.use('/api/products',productsRouter) // ruta
 app.use('/api/carts',cartsRouter)
+app.use('/api/chat',messagesRouter)
 
 app.use(express.json()) // ahora el servidor podra recibir json al momento de la peticion
 app.use(express.urlencoded({extended:true})) // permite que se pueda enviar información tmbien desde la url
@@ -58,19 +62,23 @@ app.use(express.urlencoded({extended:true})) // permite que se pueda enviar info
 const socketServer = new Server(httpServer) 
 // socketServer sera un servidor para trabajar con sockets
 
-
+const messages = [];
 socketServer.on("connection",socket =>{
     console.log("un cliente se ha conectado")
-    
-   
     socket.emit('products', productos.getProducts());
-
     socket.on('products', productoId =>{
         console.log(productoId)
         productos.deleteProductoById(parseInt(productoId))
-
     })
-
+    // -------
+    socketServer.emit("messageLogs",messages);
+    socket.broadcast.emit("messageConected","Un nuevo usuario se ha conectado")
+    //escuchar cuando haya un nuevo mensaje:
+    socket.on("message",(data)=>{
+        messages.push(data);
+        socketServer.emit("messageLogs",messages) //emitir desde el backend todo el mesagge log
+    })
+    //------
     socket.on('disconnect',()=>{
         console.log("el cliente se ha desconectado")
         socket.emit('products', productos.getProducts());

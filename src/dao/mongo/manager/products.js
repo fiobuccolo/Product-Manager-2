@@ -6,7 +6,6 @@ export default class ProductManager {
         ProductManager.#instance = this;
     }
 
-    
     async getProducts(){  
         return productModel.find().lean()
     }   
@@ -22,7 +21,7 @@ export default class ProductManager {
         }
 
     async updateProduct (id,product) {
-        return productModel.findByIdAndUpdate(id,company)
+        return productModel.findByIdAndUpdate(id,product)
     }
 
     async deleteProductoById (id) {

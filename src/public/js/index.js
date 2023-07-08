@@ -14,7 +14,7 @@ socket.on('products',datos =>{
     console.log(datos)
     const tbody = document.querySelector('.product-table tbody');
     const productos = datos;
-    tbody.innerHTML = '';
+    tbody.innerHTML = "";
     productos.forEach(element => {
         console.log(element)
         const row = document.createElement('tr')
@@ -37,6 +37,51 @@ socket.on('products',datos =>{
                 console.log({ productoId });
                 socket.emit('products', productoId);})
     });
+})
+
+let user
+let chatBox = document.getElementById("chatBox");
+
+Swal.fire({
+    tittle:"Enter your name",
+    input: "text", 
+    text:"Please enter your name to continue",
+    inputValidator: (value) =>{
+        return !value && 'Necesitas escribir un nombre de usuario para continuar' 
+    },
+    allowOutsideClick: false,
+    icon:"success",
+}) .then (result =>{
+    user=result.value
+})
+
+chatBox.addEventListener('keyup',event =>{
+    if(event.key === "Enter"){ // el mensaje se enviara cuando el usuario aprete enter
+        console.log(chatBox.value)
+        if(chatBox.value.trim().length > 0){ // corroboramos que el input no este vacio o solo contenga espacios //trim remueve los espacios en blanco
+         //   console.log("entre al if")
+            console.log(chatBox.value)
+            socket.emit("message",{user:user,message:chatBox.value}); 
+            chatBox.value=""
+        }
+    }
+})
+
+socket.on("messageLogs",(messages)=>{
+    let log = document.getElementById("messageLogs"); 
+    let msjs = ""
+    log.innerHTML="";
+    messages.forEach(message => {
+        //let messageElement = document.createElement("div");
+        //messageElement.innerHTML = `<strong>${message.user}</strong>: ${message.message}`;     
+        //log.appendChild(messageElement);   
+        msjs += `<p><strong>${message.user}</strong>: ${message.message}</p>`;     
+    });
+    log.innerHTML = msjs
+})
+socket.on("messageConected", (data) =>{
+    let log = document.getElementById("messageLogs");
+    log.innerHTML += `<p><strong>${data}</strong></p>`;     
 })
 
 

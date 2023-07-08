@@ -21,6 +21,12 @@ router.get('/products', async (req,res)=>{
     return res.render('products',{productos})
 })
 
+router.get("/chat",  (req, res) => {
+
+   res.render('chat',{});
+})
+
+
 
 //router.get('*',(req,res)=>{
 //    return res.send ('Pagina no encontrada')
