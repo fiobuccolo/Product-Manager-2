@@ -4,6 +4,7 @@
 import  express  from "express";
 //import ProductManager from "../../managers/productmanager.js";
 import ProductManager from "../dao/mongo/manager/products.js";
+import productModel from "../dao/mongo/models/products.js";
 // 24. agregar  router
 const router = express.Router();
 const productos = new ProductManager()
@@ -17,12 +18,21 @@ router.get('/realTimeProducts',(req,res)=>{
     return res.render('realTimeProducts')
 })
 router.get('/products', async (req,res)=>{ 
-    const productos = await productos.getProducts()
-    return res.render('products',{productos})
+    const { page= 1 } = req.query;
+    const { dosc, hasPrevPage, hasNextPage, prevPage, netxPage, ...rest} = 
+    await productModel.paginate({ },{ page, limit:1000, lean:true});
+   const productos = docs;
+    res.render('products',{
+        productos,
+        page:rest.page,
+        hasPrevPage,
+        hasNextPage,
+        prevPage,
+        netxPage
+    })
 })
 
 router.get("/chat",  (req, res) => {
-
    res.render('chat',{});
 })
 

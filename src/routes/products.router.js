@@ -8,6 +8,11 @@ import bodyParser from 'body-parser'
 const productsRouter = Router()
 const productos = new ProductManager()
 
+
+
+
+
+
 productsRouter.get('/', async (req,res)=>{
     // leer el archivo products y devolverlos dentro de un objeto
     const p = await productos.getProducts()
@@ -15,11 +20,12 @@ productsRouter.get('/', async (req,res)=>{
     // const { limit } = req.query;
     // console.log(limit);
     // si se recibe un limit devolver hasta ese limite de productos
-    //if(limit){res.json(p.slice(0,limit))}
+    // if(limit){res.json(p.slice(0,limit))}
     // Si no se recibe query de limite se devuelven todos los resultados
-    //else{
+    // else{
      //   console.log("estoy en el else")
         res.json({status:"success", data:p});
+    // }
       //  res.json({products:p})
     })
     // devolverlos dentro de un objeto
