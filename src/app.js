@@ -86,3 +86,57 @@ socketServer.on("connection",socket =>{
     )
 })
 
+
+
+
+
+
+/* CONSIGNA PRE ENTREGA 2
+/*
+Modificar el metodo get/ para que cumpla con:
+- recibir por query params:
+  -  un limit (opcional)
+    Permitera devolver solo el numero de elementos solicitados al momento de la peticion. 
+    default 10
+  - una page (opcionar)
+    devolver la pagina que queremos buscar, 
+    default 1
+  - sort (opcional)
+  asc/Desc - por precio
+  default: ninguno
+  - query (opcional)
+  tipo de elemento que quiero buscar (que filtro aplicar)
+  default: busqueda general
+
+  respusta:
+  -un status
+  payload: resultado de los productos
+  totalpages
+  prev page
+  next page
+  page
+  hasprevpage
+  hasnect page
+  prevlinx
+  next ling
+
+se deberá poder buscar productos por categorias o disponibilidad 
+ordenamiento de maneras asc. o desc por precio
+
+delete - api/carts/:cid/products/:pid .. elmiar del carrito el producto seleccionado
+put - api/carts/:cid  -- actualizar el carrto con una arreglo de productos
+put api/carts/:cid/products/:pid -- actualizar solo la cantidad de ejemplaes del producto-
+delete api/carts/:cid
+
+modelo carts -- populate del producto, no solo traer el id
+
+crear una vista en el routes. 
+views/products -- visualizar todos los productos con su respectiva paginacion
+cada producto: 
+- llevar a una nueva vista con el producto seleccionado con descripcion completa, precio,categoria, etc y un boton de aregar al carrito
+oo
+- contar con el boton agregar al carrito directamente sin pagina adicional
+
+- vista carts/:cid
+visualizar carrito espectifico, donde se visualizan los productos de dicho carrito
+*/

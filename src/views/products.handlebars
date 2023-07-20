@@ -25,7 +25,7 @@
   </header>
 
   <div class="product-container">
-    {{#each productos}}
+    {{#each prods}}
     <div class="product-card">
       <img src="{{img}}" alt="{{title}}">
       <h3>{{title}}</h3>
@@ -35,6 +35,16 @@
       <button id="{{id}}"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
     </div>
     {{/each}}
+    {{#if hasPrevPage}}
+    <a href="/products/?page={{prevPage}}"><button>Anterior</button></a>
+     {{/if}}
+       {{page}}
+  {{#if hasNextPage}}
+    <a href="/products/?page={{nextPage}}"><button>Siguiente</button></a>
+     {{/if}}
+
+
+
   </div>
 </body>
 

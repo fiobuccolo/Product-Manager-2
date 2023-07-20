@@ -1,9 +1,8 @@
 import cartModel from "../models/carts.js"
 import ProductManager from "./products.js"
-
+const products = new ProductManager()
 export default class CartManager {
    
-
     async getCarts(){  
         return cartModel.find().lean()
     }   
@@ -22,30 +21,38 @@ export default class CartManager {
         }
 
     async updateCart (cartId,productId) {
-       // const indiceCart = this.#carts.findIndex(cart => cart.id === cartId);
-        //const existeProducto = this.#products.getProductoById2(productId);
-    //     if (indiceCart < 0){
-    //         console.log( 'El carrito con ese ID no existe')
-    //         return 'El carrito con ese ID no existe'
-    //   }  else {
-    //         if(existeProducto){
-    //             const indiceProduct = this.#carts[indiceCart].products.findIndex(p => p.id === productId);
-    //             if(indiceProduct >= 0){
-    //                 this.#carts[indiceCart].products[indiceProduct].quantity = this.#carts[indiceCart].products[indiceProduct].quantity +1
-    //             }else{
-    //                 console.log("No entro por indice producto")
-    //             const product = {
-    //                 id: productId, 
-    //                 quantity: 1
-    //             }
-    //             this.#carts[indiceCart].products.push(product)
-    //             }
-    //             writeFileSync(this.#path,JSON.stringify(this.#carts))
-    //             return 'El producto fue agregado'
-    //              }else{ 
-    //                 console.log( 'El producto con ese ID no existe')
-    //                 return 'El producto con ese ID no existe'
-    //                 }
+        console.log('hola estoy en el updatecart')
+        const cart = await this.getCartById(cartId)
+        //const indiceCart = this.#carts.findIndex(cart => cart.id === cartId);
+      const product =  await products.getProductoById(productId)
+        // const existeProducto = this.#products.getProductoById2(productId);
+       console.log(cart)
+       console.log(product)
+        if (!cart){
+        console.log( 'El carrito con ese ID no existe')
+           return 'El carrito con ese ID no existe'
+      } 
+       //else {
+            // if(existeProducto){
+                 //const productInCart = cart.products.findById(productId)
+                 //console.log(productInCart)
+                 //this.#carts[indiceCart].products.findIndex(p => p.id === productId);
+                 //if(productInCart){
+                //     cart.product.quantity += 1; 
+                // }else{
+            //         console.log("No entro por indice producto")
+              //   const product = {
+                //     id: productId, 
+                //     quantity: 1
+               //  }
+                // cart.products.push(product)
+           //      }
+    //            writeFileSync(this.#path,JSON.stringify(this.#carts))
+          //    return 'El producto fue agregado'
+             //     }else{ 
+         //           console.log( 'El producto con ese ID no existe')
+               //      return 'El producto con ese ID no existe'
+               //      }
          return cartModel.findByIdAndUpdate(cartId,productId)
     }
 

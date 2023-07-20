@@ -10,27 +10,12 @@ const productos = new ProductManager()
 
 
 
-
-
-
 productsRouter.get('/', async (req,res)=>{
-    // leer el archivo products y devolverlos dentro de un objeto
     const p = await productos.getProducts()
-    // imprimir por consola los query params
-    // const { limit } = req.query;
-    // console.log(limit);
-    // si se recibe un limit devolver hasta ese limite de productos
-    // if(limit){res.json(p.slice(0,limit))}
-    // Si no se recibe query de limite se devuelven todos los resultados
-    // else{
-     //   console.log("estoy en el else")
         res.json({status:"success", data:p});
-    // }
-      //  res.json({products:p})
     })
-    // devolverlos dentro de un objeto
     
-//})
+
 
 /*
 - SEGUNDO ENDPOINT: ruta /products/:pid:
@@ -40,16 +25,17 @@ productsRouter.get('/', async (req,res)=>{
 productsRouter.get('/:pid', async (req,res) => {
     try{ 
     const { pid } = req.params
-    console.log(pid)
-    const p = await (productos.getProductoById(parseInt(pid)))
+    console.log(`HOlaaaa este es el ${pid}`)
+    const p = await (productos.getProductoById(pid))
     res.json(p)
-    }  catch(error){ throw new Error (error)}
+    }  catch(error){ console.log(error)}
 })
 /*
 - Tercer ENDPOINT: post un product /
 **/
 productsRouter.post('/',bodyParser.json(), async (req,res) => {
     try{ 
+        console.log("post")
         const newProduct = req.body;
         const { name,description,price,category,stock,code } = req.body
         if ( !name || !description || !price || !category || !stock || !code)
@@ -58,8 +44,8 @@ productsRouter.post('/',bodyParser.json(), async (req,res) => {
         console.log("hola")
         return res.status(201).json({status:"success", data:postResponse})
         //res.status(201).json(newProduct); 
-    }  catch(error){ throw new Error (error)}
-})
+    }  catch(error){console.log(error)}
+}) 
 
 /* Cuarto ENDPOINT: delete un product /**/
 
@@ -81,7 +67,7 @@ productsRouter.put('/:pid',bodyParser.json(),(req,res)=>{
         const { pid } = req.params;
         const props = req.body;
         console.log(pid)
-        const postResponse = productos.updateProduct(parseInt(pid), props)
+        const postResponse = productos.updateProduct(pid, props)
         return res.status(201).json(postResponse)
         }  catch(error){ throw new Error (error)}
     

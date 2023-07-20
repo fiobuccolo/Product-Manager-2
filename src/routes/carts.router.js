@@ -1,6 +1,7 @@
 // 1. importar router 
 import { Router } from "express";
-import CartManager from "../../managers/cartmanager.js";
+//import CartManager from "../../managers/cartmanager.js";
+import CartManager from "../dao/mongo/manager/carts.js";
 import ProductManager from "../../managers/productmanager.js";
 import bodyParser from 'body-parser'
 
@@ -11,11 +12,10 @@ const carts = new CartManager('files/carts.json')
 
 
 /* Primer ENDPOINT: GET: consultar todos los carts **/
-cartsRouter.get('/',(req,res)=>{
+cartsRouter.get('/',async (req,res)=>{
      // leer el archivo products y devolverlos dentro de un objeto
-     const c = carts.getCarts()
-     res.json({carts:c})
-    
+     const c = await carts.getCarts()
+     res.json({status:"success", data:c});
 })
 /* SEGUDNO  ENDPOINT: GET: consultar un cart especifico y lista los productos que pertenezcan al carrito **/
 
@@ -23,11 +23,16 @@ cartsRouter.get('/',(req,res)=>{
     try{ 
      const { cartId } = req.params;
      console.log(cartId);
-     const cart = await (carts.getCartById(parseInt(cartId)))
+     const cart = await (carts.getCartById(cartId))
      res.json(cart);
-  }catch(error){ throw new Error (error)
-    }
+  }catch(error){ console.log(error)}
+    
     })
+
+
+ 
+
+
 
   /* Tercer  ENDPOINT: POSt: Crear un carrito nuevo**/
     cartsRouter.post('/',bodyParser.json(),(req,res)=>{
@@ -37,7 +42,7 @@ cartsRouter.get('/',(req,res)=>{
            //     return res.status(400).send ({status:"error",error:"Agregar unm producto al menos para crear un cart"})        
            // } 
             
-            carts.createCart(newCart);
+            carts.addCart(newCart);
             res.status(201).json(newCart)
             //res.send({status:"success",message:"carrito creado"})    
 
@@ -48,23 +53,28 @@ cartsRouter.get('/',(req,res)=>{
    })
 
 /* Cuarto  ENDPOINT: POSt: Agregar productos a un carrito**/
-cartsRouter.post('/:cid/product/:pid',async (req,res) => {
+cartsRouter.post('/:cid/product/:pid', (req,res) => {
     try{ 
      const { cid, pid } = req.params;
- //    console.log(cid,pid);
+     console.log(cid);
+     console.log(pid);
 
-
-     const cart = await (carts.updateCart(parseInt(cid),parseInt(pid)))
+     const cart = (carts.updateCart(cid,pid))
      res.json(cart);
-  }catch(error){ throw new Error (error)
-    }
+  }catch(error){ console.log(error)}
+    
     })
 
 
 /* QUINTO  ENDPOINT: DELETE: ELiminar un carrito**/
-cartsRouter.delete('/',(req,res)=>{
-  return res.json({msg: "delete cart"})
-})
+cartsRouter.delete("/:cartId",async (req,res)=>{
+  try{ 
+    const { cartId } = req.params;
+    const cart = await (carts.deleteCartById(cartId))
+  return res.json({msg: "delete cart"},{cart})
+}catch(error){console.log(error)}}
+)
+
 /* SEXTO  ENDPOINT: DELETE: ELiminar un producto de un carrito **/
 
 
