@@ -85,6 +85,28 @@ app.get('/logout',(req,res)=>{
   })
 })
 
+// LOGIN
+app.get("/login",(req,res)=>{
+  const {username,password} = req.query;
+  if(username !== "pepe" || password !== "pepepass"){
+    return res.send("login failed")
+  }
+  req.session.user = username
+  req.session.admin = true
+  res.send("login success")
+})
+// middleware de autenticación
+function auth(req,res,next){
+  if(req.session?.user === "pepe" && req.session?.admin){
+    return next()
+  }
+  return res.status(401).send("error de autorizacion")
+}
+// aplicación del middleware
+app.get("/privado",auth,(req,res)=>{
+  res.send("essoo te  logueaste")
+})
+
 /* --- CLASEEE COOOKIEES
  una coookie debe setearse dentro del flujo de vidade una peticio. 
  endpoint /setCookie - el objeto res, para poder asiganr una cookie al cliente
