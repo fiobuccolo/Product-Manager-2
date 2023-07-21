@@ -9,7 +9,11 @@
 // 9. configurar handlebars -- agregar {{{body}}} en el main.handlebars
 // 10. saludar desde index.handlebars -->
 // 11. instalar el motor de plantillas desde terminal: npm i express-handlebars
-// 12. configurar handlebars desde motor de express 
+// 12. configurarnpm install express-session handlebars desde motor de express 
+
+
+// npm install express-session
+//npm install express cookie-parser 
 
 // 12-->
 import express  from "express";
@@ -19,6 +23,9 @@ import  _dirname from "./utils.js";
 //import ProductManager from "../managers/productmanager.js";
 import ProductManager from "./dao/mongo/manager/products.js";
 import MessageManager from "./dao/mongo/manager/messages.js";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+
 const productos = new ProductManager()
 const mgs = new MessageManager()
 
@@ -51,6 +58,52 @@ app.use('/api/chat',messagesRouter)
 app.use(express.json()) // ahora el servidor podra recibir json al momento de la peticion
 app.use(express.urlencoded({extended:true})) // permite que se pueda enviar información tmbien desde la url
 
+app.use(session({
+  secret: "secretCoder",
+  resave:true,
+  //resave permite mantener la sesion activa en caso de que la sesion se mantega inactiva. 
+  saveUninitialized:true,
+  //save..permite guardar cualquier sesion aun cuando el objeto de seion no tenga nada por contener
+  cookie:{maxAge:10000}
+}))
+
+app.get("/session",(req,res)=>{
+  if(req.session.counter){
+    req.session.counter++;
+    res.send(`Se ha visitado el sitio ${req.session.counter} veces`)
+  }
+  else{
+    req.session.counter = 1
+    res.send("Bienvenido")
+  }
+})
+//eliminar datos de session
+app.get('/logout',(req,res)=>{
+  req.session.destroy(err =>{
+    if(!err) res.send ("Logout OK")
+    else res.send({status:"Logout error",body:err})
+  })
+})
+
+/* --- CLASEEE COOOKIEES
+ una coookie debe setearse dentro del flujo de vidade una peticio. 
+ endpoint /setCookie - el objeto res, para poder asiganr una cookie al cliente
+para leerla --> endpoint /getcookies - objeto Req 
+limpiar la cookie-- endpoint /deleteCookie 
+*/
+//app.use(cookieParser("Fiosecret"))
+/*app.get("/setCookie",(req,res) =>{
+  res.cookie("NombreDeCookie","Esta es mi primer coookie",{maxAge:100000,signed:true}).send("te envio la cookie amigo");
+})
+
+app.get("/getCookies",(req,res)=>{
+  res.send(req.signedCookies);
+})
+
+app.get("/deleteCookie",(req,res)=>{
+  res.clearCookie("NombreDeCookie").send("Cookie eliminada")
+})
+*/
 
 
 //17. levantamos el servidor
