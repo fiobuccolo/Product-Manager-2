@@ -14,6 +14,8 @@
 
 // npm install express-session
 //npm install express cookie-parser 
+//npm install session-file-store
+//npm i connect-mongo
 
 // 12-->
 import express  from "express";
@@ -25,9 +27,12 @@ import ProductManager from "./dao/mongo/manager/products.js";
 import MessageManager from "./dao/mongo/manager/messages.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+//import  FileStore  from "session-file-store";
+import MongoStore from "connect-mongo";
 
 const productos = new ProductManager()
 const mgs = new MessageManager()
+//const fileStorage = FileStore(session);
 
 // 29. import router
 import router from "./routes/views.router.js";
@@ -57,14 +62,19 @@ app.use('/api/chat',messagesRouter)
 
 app.use(express.json()) // ahora el servidor podra recibir json al momento de la peticion
 app.use(express.urlencoded({extended:true})) // permite que se pueda enviar información tmbien desde la url
-
+app.use(cookieParser())
 app.use(session({
+  //store: new fileStorage({path: "./sessions"}),
+  store: MongoStore.create({
+    mongoUrl:"mongodb+srv://fiobuccolo:cpXkFd2RxRW7QihN@cluster0.zeygiem.mongodb.net/?retryWrites=true&w=majority",
+    ttl:15,
+  }),
   secret: "secretCoder",
   resave:true,
   //resave permite mantener la sesion activa en caso de que la sesion se mantega inactiva. 
   saveUninitialized:true,
   //save..permite guardar cualquier sesion aun cuando el objeto de seion no tenga nada por contener
-  cookie:{maxAge:10000}
+  //cookie:{maxAge:10000}
 }))
 
 app.get("/session",(req,res)=>{

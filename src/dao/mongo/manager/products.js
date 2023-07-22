@@ -9,8 +9,9 @@ export default class ProductManager {
 
     async paginateProducts(limit,page, filter,sort){
     
-         return productModel.paginate(filter,{ page, limit, sort, lean:true}); 
-  
+         const producs = productModel.paginate(filter,{ page, limit, sort, lean:true}); 
+      console.log(`desde el managerproducs`)
+      return producs
     }
     
     async getProducts (){  
@@ -18,9 +19,9 @@ export default class ProductManager {
     }   
 
     async getProductoById(id){
-            // const ProductExist = productModel.findById(id)
-           //  return ProductExist ? ProductExist : "No existe ese id de producto" 
-             return productModel.findById(id)
+             const ProductExist = productModel.findById(id).lean()
+            console.log(ProductExist)
+             return ProductExist ? ProductExist : "No existe ese id de producto" 
         } 
 
 
