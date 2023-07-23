@@ -11,6 +11,7 @@ export default class CartManager {
 
     async getCartById(id){
              const cartExist = cartModel.findById(id)
+             console.log(cartExist)
              return cartExist ? cartExist : "No existe ese id de carrito" 
         } 
 

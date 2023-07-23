@@ -39,6 +39,7 @@ import router from "./routes/views.router.js";
 import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
 import messagesRouter from "./routes/messages.router.js";
+import sessionsRouter from "./routes/sessions.router.js";
 
 // clase 10.2 
 import { Server } from "socket.io";
@@ -59,6 +60,7 @@ app.use('/',router) // ruta
 app.use('/api/products',productsRouter) // ruta
 app.use('/api/carts',cartsRouter)
 app.use('/api/chat',messagesRouter)
+app.use('/api/sessions',sessionsRouter)
 
 app.use(express.json()) // ahora el servidor podra recibir json al momento de la peticion
 app.use(express.urlencoded({extended:true})) // permite que se pueda enviar información tmbien desde la url
@@ -67,7 +69,7 @@ app.use(session({
   //store: new fileStorage({path: "./sessions"}),
   store: MongoStore.create({
     mongoUrl:"mongodb+srv://fiobuccolo:cpXkFd2RxRW7QihN@cluster0.zeygiem.mongodb.net/?retryWrites=true&w=majority",
-    ttl:15,
+    ttl:25,
   }),
   secret: "secretCoder",
   resave:true,

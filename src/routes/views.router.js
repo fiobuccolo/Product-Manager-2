@@ -55,20 +55,6 @@ se deberá poder buscar productos por categorias o disponibilidad
 ordenamiento de maneras asc. o desc por precio
 */
 
-
-    
-    
- /*
-Primero en mi ruta en el GET /, 
-desestructuraria el objeto query, de esta manera
- let { limit = 10, page = 1, filter = null, sort = null } = req.query 
- - otorgándole valores por defecto a todos ellos, ya que son OPCIONALES (pueden existir o no)
-Una vez que tengo estos valores, 
-llamaria en mi ruta a mi productsManager.paginateProducts(limit, page, filter, sort) -ç
- y le pasaría todos los valores que obtuve de la query params
-  (recordá que la respuesta de este método va a tener, docs, hasPrevPage, hasNextPage, etc)
-   que es lo que tengo que usar para armar el objeto y responder en esta ruta.
- */
    
    // en el campo docs obtrendremos los resultados que solicitamos, y la info de la paginación
 router.get('/products', async (req,res)=>{ 
@@ -94,8 +80,18 @@ router.get("/chat",  (req, res) => {
    res.render('chat',{});
 })
 
-
-
+// ------ RUTA REGISTROOO ---------
+router.get("/register",  (req, res) => {
+  res.render('register',{});
+})
+// ------ RUTA LOGIN ---------
+router.get("/login",  (req, res) => {
+  res.render('login',{});
+})
+// ------ RUTA PROFILE ---------
+router.get("/profile",  (req, res) => {
+  res.render('profile',{});
+})
 //router.get('*',(req,res)=>{
 //    return res.send ('Pagina no encontrada')
 //})
