@@ -16,6 +16,7 @@
 //npm install express cookie-parser 
 //npm install session-file-store
 //npm i connect-mongo
+// npm install bcrypt
 
 // 12-->
 import express  from "express";
@@ -69,7 +70,7 @@ app.use(session({
   //store: new fileStorage({path: "./sessions"}),
   store: MongoStore.create({
     mongoUrl:"mongodb+srv://fiobuccolo:cpXkFd2RxRW7QihN@cluster0.zeygiem.mongodb.net/?retryWrites=true&w=majority",
-    ttl:25,
+    ttl:3600,
   }),
   secret: "secretCoder",
   resave:true,

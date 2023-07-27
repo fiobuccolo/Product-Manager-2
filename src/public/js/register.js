@@ -1,3 +1,5 @@
+
+
 const form = document.getElementById("registerForm");
 
 form.addEventListener("submit", async(event) =>{
@@ -12,13 +14,22 @@ form.addEventListener("submit", async(event) =>{
     console.log(body)
      const response = await fetch("http://localhost:8080/api/sessions/register",{
        method: "POST",
-         body: body,
+         body: JSON.stringify(obj),
          headers:{
-             "Content-Type": "application/json",
+             "Content-Type": "application/json; charset=UTF-8",
          },
-     });
-     const responseData = await response.json();
-     if (responseData.status === "success"){
-         window.location.replace("/login")
-     }
-})
+     }).then(res => {
+		if (res.status !== 200) {
+			alert(`Invalid credentials`);
+		} else {
+			alert(`Created`);
+			window.location.replace("/login");
+		};
+	}).catch(err => {return `Catch error: ${err}`});
+//      const responseData = await response.json();
+//      console.log(responseData)
+//      if (responseData.status === "success"){
+//         console.log("llegue al if del register")
+//          window.location.replace("/login")
+//      }
+ })
