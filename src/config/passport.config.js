@@ -7,6 +7,7 @@ import { createHash, isValidPassword } from "../utils.js";
 
 const localStrategy = local.Strategy;
 
+
 const initializePassport = () => {
     // passport utiliza sus propios "middlewares" de acuerdo a cada estrategia
     // username sera en este caso el correo
@@ -16,27 +17,37 @@ const initializePassport = () => {
         "register",
       new localStrategy(
         {
-            passReqToCallback: false,  // passReqToCallback permite que e pueda acceder al objeto req como cualquier otro middlewEW
-            usernameField: "email"
+             usernameField: "email",
+             passReqToCallback: true,
+            // passReqToCallback permite que e pueda acceder al objeto req como cualquier otro middlewEW     
         },
+        
          async ( req, username, password, done) => {
             console.log("HOllaaa!")
-            console.log(req)
+           
+            console.log(username)
             console.log("chauuu!")
                 const { first_name, last_name, email} = req.body;
+                console.log(first_name)
                 if (!first_name ||!last_name || !email )
                     return done(null, false, {message: "Faltan datos"})
             try{
-                const user = await userModel.findOne({email:username});
+                console.log("llegue al try")
+                const user = await userModel.findOne({ email:username });
+               
                 if (user){
+                    console.log(user)
                     return done(null, false, {message: "User already exists"})
                 }
+                console.log("no encontre el user, deberia crear uno")
+                console.log(first_name,last_name ,email,password)
                 const newUser = {
                     first_name,
                     last_name,
                     email,
                     password: createHash(password),
                 }
+                console.log(`imprimiendo los datos del new user:${newUser}`)
                 const result = await userModel.create(newUser);
                 return done(null, result, {message: "User creado"})
             }catch(error){

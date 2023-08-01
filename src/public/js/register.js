@@ -8,16 +8,16 @@ form.addEventListener("submit", async(event) =>{
     //const first_name = document.getElementById("first_name").value
     //console.log(first_name)
     const obj = {};
-     data.forEach((value,key) => (obj[key] = value));
-    console.log(obj)
-    
-    
+    data.forEach((value, key) => (obj[key] = value));
+     
+    // console.log(obj)
      const response = await fetch("http://localhost:8080/api/sessions/register",{
        method: "POST",
          body: JSON.stringify(obj),
          headers:{
-             "Content-Type": "application/json; charset=UTF-8",
+             "Content-Type": "application/json",
          },
+         
      }).then(res => {
 		if (res.status !== 200) {
 			alert(`Invalid credentials`);

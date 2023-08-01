@@ -9,10 +9,10 @@ const sessionsRouter = Router();
 
 sessionsRouter.post(
     "/register",
-    
      passport.authenticate("register"),
     async (req,res)=>{
-   res.send({status: "success", message: "Usuario creado"})
+       
+        res.status(200).send({status:"success", payload: postResponse})
     /* try{
     
     console.log(`hola soy el ${newUser}`)

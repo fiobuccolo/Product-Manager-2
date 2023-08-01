@@ -59,10 +59,10 @@ app.set("views",_dirname + "/views")
 //15- con app.set("view engine","handlebars") indicamos que el motor que ya inicializamos es el que queremos usar. 
 app.set("view engine","handlebars")
 //16. seteamos de manera estatica nuestra carpeta public
-app.use(express.static(_dirname+ "/public"))
+
 app.use(express.json()) // ahora el servidor podra recibir json al momento de la peticion
 app.use(express.urlencoded({extended:true})) // permite que se pueda enviar información tmbien desde la url
-
+app.use(express.static(_dirname+ "/public"))
 
 // 30. agregar router -- app use
 app.use('/',router) // ruta
@@ -110,8 +110,8 @@ app.get('/logout',(req,res)=>{
     else res.send({status:"Logout error",body:err})
   })
 })
-
-// LOGIN
+/*
+ LOGIN
 app.get("/login",(req,res)=>{
   const {username,password} = req.query;
   if(username !== "pepe" || password !== "pepepass"){
@@ -121,17 +121,22 @@ app.get("/login",(req,res)=>{
   req.session.admin = true
   res.send("login success")
 })
-// middleware de autenticación
+*/
+
+/* middleware de autenticación
 function auth(req,res,next){
   if(req.session?.user === "pepe" && req.session?.admin){
     return next()
   }
   return res.status(401).send("error de autorizacion")
 }
-// aplicación del middleware
+*/
+/* aplicación del middleware
 app.get("/privado",auth,(req,res)=>{
   res.send("essoo te  logueaste")
 })
+*/
+
 
 /* --- CLASEEE COOOKIEES
  una coookie debe setearse dentro del flujo de vidade una peticio. 
@@ -190,54 +195,3 @@ socketServer.on("connection",socket =>{
 
 
 
-
-
-/* CONSIGNA PRE ENTREGA 2
-/*
-Modificar el metodo get/ para que cumpla con:
-- recibir por query params:
-  -  un limit (opcional)
-    Permitera devolver solo el numero de elementos solicitados al momento de la peticion. 
-    default 10
-  - una page (opcionar)
-    devolver la pagina que queremos buscar, 
-    default 1
-  - sort (opcional)
-  asc/Desc - por precio
-  default: ninguno
-  - query (opcional)
-  tipo de elemento que quiero buscar (que filtro aplicar)
-  default: busqueda general
-
-  respusta:
-  -un status
-  payload: resultado de los productos
-  totalpages
-  prev page
-  next page
-  page
-  hasprevpage
-  hasnect page
-  prevlinx
-  next ling
-
-se deberá poder buscar productos por categorias o disponibilidad 
-ordenamiento de maneras asc. o desc por precio
-
-delete - api/carts/:cid/products/:pid .. elmiar del carrito el producto seleccionado
-put - api/carts/:cid  -- actualizar el carrto con una arreglo de productos
-put api/carts/:cid/products/:pid -- actualizar solo la cantidad de ejemplaes del producto-
-delete api/carts/:cid
-
-modelo carts -- populate del producto, no solo traer el id
-
-crear una vista en el routes. 
-views/products -- visualizar todos los productos con su respectiva paginacion
-cada producto: 
-- llevar a una nueva vista con el producto seleccionado con descripcion completa, precio,categoria, etc y un boton de aregar al carrito
-oo
-- contar con el boton agregar al carrito directamente sin pagina adicional
-
-- vista carts/:cid
-visualizar carrito espectifico, donde se visualizan los productos de dicho carrito
-*/
