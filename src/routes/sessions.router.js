@@ -2,14 +2,21 @@ import Router from "express";
 import userModel from "../dao/mongo/models/users.js";
 import bodyParser from 'body-parser'
 import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";
+
 
 const sessionsRouter = Router();
 
-sessionsRouter.post("/register", bodyParser.json(), async (req,res)=>{
-    try{
+sessionsRouter.post(
+    "/register",
     
-    //console.log(`hola soy el ${newUser}`)
-    const { first_name , last_name, email, password } = req.body;
+     passport.authenticate("register"),
+    async (req,res)=>{
+   res.send({status: "success", message: "Usuario creado"})
+    /* try{
+    
+    console.log(`hola soy el ${newUser}`)
+    //const { first_name , last_name, email, password } = req.body;
     console.log(`hola soy la ${password}`)
     console.log(`hola soy el ${first_name}`)
     // const user = new userModel([first_name,last_name,email,password])
@@ -26,9 +33,12 @@ sessionsRouter.post("/register", bodyParser.json(), async (req,res)=>{
     const postResponse = await userModel.create(newUser);
     // user.save() // otra forma que no vimos nosotros el save
     //res.redirect("/login")
-    return res.status(200).send({status:"success", payload: postResponse})
-    }catch(error){res.status(400).json({status:"error", data:error})
+    
+     return res.status(200).send({status:"success", payload: postResponse})
+         }catch(error){res.status(400).json({status:"error", data:error})
         console.log(error)}
+        */
+
     })
 
 sessionsRouter.post("/login", bodyParser.json(),async(req,res)=>{

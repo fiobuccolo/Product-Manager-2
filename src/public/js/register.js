@@ -10,8 +10,8 @@ form.addEventListener("submit", async(event) =>{
     const obj = {};
      data.forEach((value,key) => (obj[key] = value));
     console.log(obj)
-    body = JSON.stringify(obj);
-    console.log(body)
+    
+    
      const response = await fetch("http://localhost:8080/api/sessions/register",{
        method: "POST",
          body: JSON.stringify(obj),

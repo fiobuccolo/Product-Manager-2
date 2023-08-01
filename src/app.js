@@ -17,6 +17,7 @@
 //npm install session-file-store
 //npm i connect-mongo
 // npm install bcrypt
+// npm install passport passport-local
 
 // 12-->
 import express  from "express";
@@ -47,6 +48,9 @@ import { Server } from "socket.io";
 const app = express(); 
 const connection = await mongoose.connect("mongodb+srv://fiobuccolo:cpXkFd2RxRW7QihN@cluster0.zeygiem.mongodb.net/?retryWrites=true&w=majority")
 
+// imports passport
+import passport from "passport";
+import initializePassport from "./config/passport.config.js"
 
 //13- inicializamos el motor indicando con app.engine que motor utilizaremos
 app.engine('handlebars',handlebars.engine());
@@ -56,6 +60,10 @@ app.set("views",_dirname + "/views")
 app.set("view engine","handlebars")
 //16. seteamos de manera estatica nuestra carpeta public
 app.use(express.static(_dirname+ "/public"))
+app.use(express.json()) // ahora el servidor podra recibir json al momento de la peticion
+app.use(express.urlencoded({extended:true})) // permite que se pueda enviar información tmbien desde la url
+
+
 // 30. agregar router -- app use
 app.use('/',router) // ruta
 app.use('/api/products',productsRouter) // ruta
@@ -63,8 +71,9 @@ app.use('/api/carts',cartsRouter)
 app.use('/api/chat',messagesRouter)
 app.use('/api/sessions',sessionsRouter)
 
-app.use(express.json()) // ahora el servidor podra recibir json al momento de la peticion
-app.use(express.urlencoded({extended:true})) // permite que se pueda enviar información tmbien desde la url
+
+
+
 app.use(cookieParser())
 app.use(session({
   //store: new fileStorage({path: "./sessions"}),
@@ -79,6 +88,10 @@ app.use(session({
   //save..permite guardar cualquier sesion aun cuando el objeto de seion no tenga nada por contener
   //cookie:{maxAge:10000}
 }))
+// use passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/session",(req,res)=>{
   if(req.session.counter){
