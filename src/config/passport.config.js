@@ -47,7 +47,7 @@ const initializePassport = () => {
                     email,
                     password: createHash(password),
                 }
-                console.log(`imprimiendo los datos del new user:${newUser}`)
+                
                 const result = await userModel.create(newUser);
                 return done(null, result, {message: "User creado"})
             }catch(error){
@@ -55,6 +55,26 @@ const initializePassport = () => {
             }
         }
     ));
+
+    passport.use ("login", new localStrategy ({
+        usernameField:"email",
+        },
+        async (username,password,done) => {
+            try{
+                const user = await userModel.findOne({email: username});
+                if(!user) {
+                    return done(null,false, {message: "User not found"});
+                }
+                if (!isValidPassword(user, password)){
+                    return done(null,false, {message: "Wrong password"});
+                }
+                return done(null,user);
+            }catch(error){
+                return done("error al obtener el usuario" + error);
+            }
+        }
+    ))
+
    passport.serializeUser((user,done) => {
     done(null, user._id)
    });
