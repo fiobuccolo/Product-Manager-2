@@ -41,32 +41,45 @@ sessionsRouter.post(
 
     })
 
-sessionsRouter.post("/login", bodyParser.json(),async(req,res)=>{
-    try{
-        //const user = req.body;
-    const {email, password} = req.body;
-    console.log(`hola ${email}`)  
-     console.log(`hola ${password}`)
-    if ( !email || !password)
-        return res.status(400).send({status:"error", error: "Datos incompletos"})
-    const user =  await userModel.findOne({email:email});
-   // console.log(user)
-    if(!user) return res.status(404).send({status:"error",message:"user not found"});
-    if(!isValidPassword(user,password)) return res.status(403).send({status:"error",message:"incorrect password"})
-
-    delete user.password
-    //req.session.user= user;
-    console.log(user)
-    //  req.session.user = {
-    //      name: `${user.first_name} ${user.last_name}`,
-    //      email: user.email
-    //  }
-    //  console.log(req.session.user)
-    res.status(200).send({status:"success", payload: user})
-    }catch{
-
+sessionsRouter.post("/login", passport.authenticate("login", {failureRedirect: "/failureRedirect"}),
+    async (req,res) => {
+    if(!req.user)
+        return res.status(400).send({
+            status:"error", 
+            error: "usuario o contraseña incorrecta"
+        });
+    console.log ("user",req.user);
+    req.session.user = req.user;
+    res.send({status:"sucess",payload:user})
     }
-})
+)
+
+//--- LOGIN SIN PASSPORT---- 
+//sessionsRouter.post("/login", bodyParser.json(),async(req,res)=>{
+//     try{
+//         //const user = req.body;
+//     const {email, password} = req.body;
+//     console.log(`hola ${email}`)  
+//      console.log(`hola ${password}`)
+//     if ( !email || !password)
+//         return res.status(400).send({status:"error", error: "Datos incompletos"})
+//     const user =  await userModel.findOne({email:email});
+//    // console.log(user)
+//     if(!user) return res.status(404).send({status:"error",message:"user not found"});
+//     if(!isValidPassword(user,password)) return res.status(403).send({status:"error",message:"incorrect password"})
+
+//     delete user.password
+//     //req.session.user= user;
+//     console.log(user)
+//     //  req.session.user = {
+//     //      name: `${user.first_name} ${user.last_name}`,
+//     //      email: user.email
+//     //  }
+//     //  console.log(req.session.user)
+//     res.status(200).send({status:"success", payload: user})
+//     }catch{
+//     }
+// })
 
 
 export default sessionsRouter
