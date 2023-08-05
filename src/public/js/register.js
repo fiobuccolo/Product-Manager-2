@@ -18,14 +18,21 @@ form.addEventListener("submit", async(event) =>{
              "Content-Type": "application/json",
          },
          
-     }).then(res => {
-		if (res.status !== 200) {
-			alert(`Invalid credentials`);
-		} else {
-			alert(`Created`);
-			window.location.replace("/login");
-		};
-	}).catch(err => {return `Catch error: ${err}`});
+     })
+     const responseData = await response.json();
+     if (responseData.status === 'success') {
+       //redirijo al login
+       //muestro modal
+       window.location.replace('/login');
+     }
+    //  .then(res => {
+		// if (res.status !== 200) {
+		// 	alert(`Invalid credentials`);
+		// } else {
+		// 	alert(`Created`);
+		// 	window.location.replace("/login");
+		// };
+	//}).catch(err => {return `Catch error: ${err}`});
 //      const responseData = await response.json();
 //      console.log(responseData)
 //      if (responseData.status === "success"){

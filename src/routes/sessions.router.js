@@ -7,14 +7,22 @@ import passport from "passport";
 
 const sessionsRouter = Router();
 
-sessionsRouter.post(
-    "/register",
+sessionsRouter.get("/github", passport.authenticate("github"),(req,res)=>{
+}) 
+sessionsRouter.get("/githubcallback",passport.authenticate("github"),(req,res)=>{
+    
+    res.redirect("/");
+})
+
+// RUTA DE REGISTER CON PASSPORT --
+  /*  sessionsRouter.post( "/register",
      passport.authenticate("register"),
     async (req,res)=>{
        
         res.status(200).send({status:"success", payload: postResponse})
-    /* try{
-    
+    */
+        //-- 
+        /* try{ 
     console.log(`hola soy el ${newUser}`)
     //const { first_name , last_name, email, password } = req.body;
     console.log(`hola soy la ${password}`)
@@ -37,22 +45,27 @@ sessionsRouter.post(
      return res.status(200).send({status:"success", payload: postResponse})
          }catch(error){res.status(400).json({status:"error", data:error})
         console.log(error)}
-        */
+       
 
-    })
+    })*/
 
-sessionsRouter.post("/login", passport.authenticate("login", {failureRedirect: "/failureRedirect"}),
-    async (req,res) => {
-    if(!req.user)
-        return res.status(400).send({
-            status:"error", 
-            error: "usuario o contraseña incorrecta"
-        });
-    console.log ("user",req.user);
-    req.session.user = req.user;
-    res.send({status:"sucess",payload:user})
-    }
-)
+
+
+
+// RUTA DE LOGIN CON PASSPORT --
+
+  /*  sessionsRouter.post("/login", passport.authenticate("login", {failureRedirect: "/failureRedirect"}),
+        async (req,res) => {
+        if(!req.user)
+            return res.status(400).send({
+                status:"error", 
+                error: "usuario o contraseña incorrecta"
+            });
+        console.log ("user",req.user);
+        req.session.user = req.user;
+        res.send({status:"sucess",payload:user})
+        }
+    ) */
 
 //--- LOGIN SIN PASSPORT---- 
 //sessionsRouter.post("/login", bodyParser.json(),async(req,res)=>{

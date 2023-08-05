@@ -2,6 +2,7 @@ import passport from "passport";
 import local from "passport-local";
 import userModel from "../dao/mongo/models/users.js";
 import bodyParser from "body-parser";
+import GithubStrategy from "passport-github2"
 
 import { createHash, isValidPassword } from "../utils.js";
 
@@ -12,51 +13,53 @@ const initializePassport = () => {
     // passport utiliza sus propios "middlewares" de acuerdo a cada estrategia
     // username sera en este caso el correo
     // done, sera el callback de resolucion
-    
-    passport.use(
-        "register",
-      new localStrategy(
-        {
-             usernameField: "email",
-             passReqToCallback: true,
-            // passReqToCallback permite que e pueda acceder al objeto req como cualquier otro middlewEW     
-        },
-        
-         async ( req, username, password, done) => {
-            console.log("HOllaaa!")
-           
-            console.log(username)
-            console.log("chauuu!")
-                const { first_name, last_name, email} = req.body;
-                console.log(first_name)
-                if (!first_name ||!last_name || !email )
-                    return done(null, false, {message: "Faltan datos"})
-            try{
-                console.log("llegue al try")
-                const user = await userModel.findOne({ email:username });
-               
-                if (user){
-                    console.log(user)
-                    return done(null, false, {message: "User already exists"})
-                }
-                console.log("no encontre el user, deberia crear uno")
-                console.log(first_name,last_name ,email,password)
-                const newUser = {
-                    first_name,
-                    last_name,
-                    email,
-                    password: createHash(password),
-                }
+    // -- COmento estrategia de passport local paara clase del 20/07 githubstrategy 
+        // LOCAL STRATEGY
+            /*   passport.use(
+                "register",
+            new localStrategy(
+                {
+                    usernameField: "email",
+                    passReqToCallback: true,
+                    // passReqToCallback permite que e pueda acceder al objeto req como cualquier otro middlewEW     
+                },
                 
-                const result = await userModel.create(newUser);
-                return done(null, result, {message: "User creado"})
-            }catch(error){
-                return done("Errro al obtener el usuario" + error)
-            }
-        }
-    ));
-
-    passport.use ("login", new localStrategy ({
+                async ( req, username, password, done) => {
+                    console.log("HOllaaa!")
+                
+                    console.log(username)
+                    console.log("chauuu!")
+                        const { first_name, last_name, email} = req.body;
+                        console.log(first_name)
+                        if (!first_name ||!last_name || !email )
+                            return done(null, false, {message: "Faltan datos"})
+                    try{
+                        console.log("llegue al try")
+                        const user = await userModel.findOne({ email:username });
+                    
+                        if (user){
+                            console.log(user)
+                            return done(null, false, {message: "User already exists"})
+                        }
+                        console.log("no encontre el user, deberia crear uno")
+                        console.log(first_name,last_name ,email,password)
+                        const newUser = {
+                            first_name,
+                            last_name,
+                            email,
+                            password: createHash(password),
+                        }
+                        
+                        const result = await userModel.create(newUser);
+                        return done(null, result, {message: "User creado"})
+                    }catch(error){
+                        return done("Errro al obtener el usuario" + error)
+                    }
+                }
+            ));
+            */
+        //----  LOGIN PASSPORT LOCAL-----
+            /* passport.use ("login", new localStrategy ({
         usernameField:"email",
         },
         async (username,password,done) => {
@@ -74,7 +77,36 @@ const initializePassport = () => {
             }
         }
     ))
-
+    */
+ 
+    // ESTRATEGIA DE GITHUB
+    passport.use("github", new GithubStrategy({
+        clientID:"Iv1.0a968fb82c4611c4",
+        clientSecret: "46a021f7b89bac963b163b7d5a2c29ea302b5517",
+        callbackURL:"http://localhost:8080/api/sessions/githubcallback",
+    }, async (accesToken,refreshToken, profile, done) =>{
+       try {
+        console.log("hola estoy en el config")
+        console.log(profile);
+        const user =  await userModel.findOne({email: profile._json.email });
+        console.log(profile._json.id)
+        if(!user){
+            const newUser = {
+                first_name:profile._json.name.split(" ")[0],
+                last_name: profile._json.name.split(" ")[2],
+                email:profile._json.email,
+                password:""
+            }
+            const result = await userModel.create(newUser);
+            return done(null, result);
+        } else {
+            return done(null, user);
+          }
+       } catch (error) {
+        return done("Error al obtener el usuario"+error) 
+       } 
+    }
+    ))
    passport.serializeUser((user,done) => {
     done(null, user._id)
    });

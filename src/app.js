@@ -18,6 +18,7 @@
 //npm i connect-mongo
 // npm install bcrypt
 // npm install passport passport-local
+// npm i passport-github2  
 
 // 12-->
 import express  from "express";
@@ -75,6 +76,7 @@ app.use('/api/sessions',sessionsRouter)
 
 
 app.use(cookieParser())
+//var session = require('express-session')
 app.use(session({
   //store: new fileStorage({path: "./sessions"}),
   store: MongoStore.create({
@@ -82,9 +84,9 @@ app.use(session({
     ttl:3600,
   }),
   secret: "secretCoder",
-  resave:true,
+  resave:false,
   //resave permite mantener la sesion activa en caso de que la sesion se mantega inactiva. 
-  saveUninitialized:true,
+  saveUninitialized:false,
   //save..permite guardar cualquier sesion aun cuando el objeto de seion no tenga nada por contener
   //cookie:{maxAge:10000}
 }))

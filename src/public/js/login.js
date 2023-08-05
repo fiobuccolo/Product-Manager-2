@@ -16,16 +16,20 @@ form.addEventListener("submit", async(event) =>{
          headers:{
              "Content-Type": "application/json; charset=UTF-8",
          },
-     }).then(res => {
+     })
+     const responseData = await response.json();
+     console.log(responseData);
      
-      if (res.status !== 200) {
-        alert(`Invalid credentials`);
-      } else {
+    //  .then(res => {
+     
+    //   if (res.status !== 200) {
+    //     alert(`Invalid credentials`);
+    //   } else {
        
-        alert(`Loged`);
-        window.location.replace("/");
-      };
-    }).catch(err => {return `Catch error: ${err}`});
+    //     alert(`Loged`);
+    //     window.location.replace("/");
+    //   };
+    // }).catch(err => {return `Catch error: ${err}`});
     //  const responseData = await response.json();
     //  if (responseData.status === "success"){
     //    console.log("llegue al if del register")
