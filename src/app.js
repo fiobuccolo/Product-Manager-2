@@ -53,6 +53,7 @@ const connection = await mongoose.connect("mongodb+srv://fiobuccolo:cpXkFd2RxRW7
 import passport from "passport";
 import initializePassport from "./config/passport.config.js"
 
+
 //13- inicializamos el motor indicando con app.engine que motor utilizaremos
 app.engine('handlebars',handlebars.engine());
 //14. con app.set("views",ruta) indicamos en que parte del proyecto estaran las vistas
@@ -86,7 +87,7 @@ app.use(session({
   secret: "secretCoder",
   resave:false,
   //resave permite mantener la sesion activa en caso de que la sesion se mantega inactiva. 
-  saveUninitialized:false,
+  saveUninitialized:true,
   //save..permite guardar cualquier sesion aun cuando el objeto de seion no tenga nada por contener
   //cookie:{maxAge:10000}
 }))

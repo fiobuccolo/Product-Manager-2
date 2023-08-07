@@ -3,6 +3,7 @@ import local from "passport-local";
 import userModel from "../dao/mongo/models/users.js";
 import bodyParser from "body-parser";
 import GithubStrategy from "passport-github2"
+//import GithubStrategy from "passport-github"
 
 import { createHash, isValidPassword } from "../utils.js";
 
@@ -84,18 +85,24 @@ const initializePassport = () => {
         clientID:"Iv1.0a968fb82c4611c4",
         clientSecret: "46a021f7b89bac963b163b7d5a2c29ea302b5517",
         callbackURL:"http://localhost:8080/api/sessions/githubcallback",
+        scope: 'user:email, user:name'
     }, async (accesToken,refreshToken, profile, done) =>{
        try {
         console.log("hola estoy en el config")
+        console.log(`email: ${profile.emails[0].value}`);
+        console.log(`id: ${profile._json.id}`);
         console.log(profile);
-        const user =  await userModel.findOne({email: profile._json.email });
-        console.log(profile._json.id)
+        if (!profile.emails[0].value){
+            console.log("No tengo el email")
+            return done("Error al obtener el usuario") }
+        const user =  await userModel.findOne({email:profile.emails[0].value});
+        console.log(profile._json.name.split(" ")[0],profile._json.name.split(" ")[1],)
         if(!user){
             const newUser = {
                 first_name:profile._json.name.split(" ")[0],
-                last_name: profile._json.name.split(" ")[2],
-                email:profile._json.email,
-                password:""
+                last_name: profile._json.name.split(" ")[1],
+                email:profile.emails[0].value,
+                password:"",
             }
             const result = await userModel.create(newUser);
             return done(null, result);

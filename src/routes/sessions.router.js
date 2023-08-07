@@ -7,11 +7,11 @@ import passport from "passport";
 
 const sessionsRouter = Router();
 
-sessionsRouter.get("/github", passport.authenticate("github"),(req,res)=>{
+sessionsRouter.get("/github", passport.authenticate("github"), (req,res)=>{
 }) 
-sessionsRouter.get("/githubcallback",passport.authenticate("github"),(req,res)=>{
-    
-    res.redirect("/");
+
+sessionsRouter.get("/githubcallback",passport.authenticate("github",{session: false}), async (req,res)=>{
+    res.redirect("/login");
 })
 
 // RUTA DE REGISTER CON PASSPORT --
