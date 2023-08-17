@@ -1,5 +1,3 @@
-
-
 const form = document.getElementById("registerForm");
 
 form.addEventListener("submit", async(event) =>{
@@ -9,8 +7,7 @@ form.addEventListener("submit", async(event) =>{
     //console.log(first_name)
     const obj = {};
     data.forEach((value, key) => (obj[key] = value));
-     
-    // console.log(obj)
+     console.log(obj)
      const response = await fetch("http://localhost:8080/api/sessions/register",{
        method: "POST",
          body: JSON.stringify(obj),

@@ -16,7 +16,8 @@ const initializePassport = () => {
     // done, sera el callback de resolucion
     // -- COmento estrategia de passport local paara clase del 20/07 githubstrategy 
         // LOCAL STRATEGY
-            /*   passport.use(
+            /* ---   REGISTER PASSPORT LOCAL-----
+             passport.use(
                 "register",
             new localStrategy(
                 {
@@ -80,8 +81,8 @@ const initializePassport = () => {
     ))
     */
  
-    // ESTRATEGIA DE GITHUB
-    passport.use("github", new GithubStrategy({
+    // ----- ESTRATEGIA DE GITHUB ------
+   /* passport.use("github", new GithubStrategy({
         clientID:"Iv1.0a968fb82c4611c4",
         clientSecret: "46a021f7b89bac963b163b7d5a2c29ea302b5517",
         callbackURL:"http://localhost:8080/api/sessions/githubcallback",
@@ -102,7 +103,7 @@ const initializePassport = () => {
                 first_name:profile._json.name.split(" ")[0],
                 last_name: profile._json.name.split(" ")[1],
                 email:profile.emails[0].value,
-                password:"",
+                password: " ",
             }
             const result = await userModel.create(newUser);
             return done(null, result);
@@ -114,6 +115,8 @@ const initializePassport = () => {
        } 
     }
     ))
+*/
+
    passport.serializeUser((user,done) => {
     done(null, user._id)
    });

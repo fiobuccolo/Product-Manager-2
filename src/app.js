@@ -13,12 +13,13 @@
 
 
 // npm install express-session
-//npm install express cookie-parser 
+// npm install express cookie-parser 
 //npm install session-file-store
 //npm i connect-mongo
 // npm install bcrypt
 // npm install passport passport-local
 // npm i passport-github2  
+// npm install express jsonwebtoken 
 
 // 12-->
 import express  from "express";
@@ -32,6 +33,9 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 //import  FileStore  from "session-file-store";
 import MongoStore from "connect-mongo";
+import config from "./config/config.js";
+const PORT = config.PORT
+const MongoDB = config.MONGODB_URL
 
 const productos = new ProductManager()
 const mgs = new MessageManager()
@@ -47,8 +51,8 @@ import sessionsRouter from "./routes/sessions.router.js";
 // clase 10.2 
 import { Server } from "socket.io";
 const app = express(); 
-const connection = await mongoose.connect("mongodb+srv://fiobuccolo:cpXkFd2RxRW7QihN@cluster0.zeygiem.mongodb.net/?retryWrites=true&w=majority")
-
+//const connection = await mongoose.connect("mongodb+srv://fiobuccolo:cpXkFd2RxRW7QihN@cluster0.zeygiem.mongodb.net/?retryWrites=true&w=majority")
+const connection = await mongoose.connect(`mongodb+srv://${MongoDB}`)
 // imports passport
 import passport from "passport";
 import initializePassport from "./config/passport.config.js"
@@ -81,7 +85,7 @@ app.use(cookieParser())
 app.use(session({
   //store: new fileStorage({path: "./sessions"}),
   store: MongoStore.create({
-    mongoUrl:"mongodb+srv://fiobuccolo:cpXkFd2RxRW7QihN@cluster0.zeygiem.mongodb.net/?retryWrites=true&w=majority",
+    mongoUrl:`mongodb+srv://${MongoDB}`,
     ttl:3600,
   }),
   secret: "secretCoder",
@@ -164,9 +168,15 @@ app.get("/deleteCookie",(req,res)=>{
 
 //17. levantamos el servidor
 // clase 10.3 --> Agregamos el const httpServer =
- const httpServer = app.listen(8080,()=>{
-    console.log("Server is running in port 8080")
+const httpServer = app.listen(PORT,() =>{
+  console.log(`App listening on ${PORT}`)
 })
+
+
+// -- COMENTO ESTO PARA VER SI ME SALE EN DOTENV 
+// const httpServer = app.listen(8080,()=>{
+//     console.log("Server is running in port 8080")
+// })
 
 const socketServer = new Server(httpServer) 
 // socketServer sera un servidor para trabajar con sockets
