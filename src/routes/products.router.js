@@ -1,5 +1,6 @@
 // 1. importar router 
 import { Router } from "express";
+import productsController from "../controllers/products.controller.js";
 // importar product manager
 // import ProductManager from "../../managers/productmanager.js";
 import ProductManager from "../dao/mongo/manager/products.js";
@@ -9,13 +10,13 @@ const productsRouter = Router()
 const productos = new ProductManager()
 
 
-
-productsRouter.get('/', async (req,res)=>{
-    const p = await productos.getProducts()
-        res.json({status:"success", data:p});
-    })
+// COMENTO ESTO PARA PROBAR EL CONTROLER
+// productsRouter.get('/', async (req,res)=>{
+//     const p = await productos.getProducts()
+//         res.json({status:"success", data:p});
+//     })
     
-
+productsRouter.get("/",productsController.getProducts)
 
 /*
 - SEGUNDO ENDPOINT: ruta /products/:pid:

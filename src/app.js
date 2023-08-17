@@ -43,10 +43,11 @@ const mgs = new MessageManager()
 
 // 29. import router
 import router from "./routes/views.router.js";
-import productsRouter from './routes/products.router.js';
+//import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
 import messagesRouter from "./routes/messages.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
+import indexRouter from "./routes/index.js";
 
 // clase 10.2 
 import { Server } from "socket.io";
@@ -72,7 +73,8 @@ app.use(express.static(_dirname+ "/public"))
 
 // 30. agregar router -- app use
 app.use('/',router) // ruta
-app.use('/api/products',productsRouter) // ruta
+//app.use('/api/products',productsRouter) // ruta
+app.use("/api",indexRouter)
 app.use('/api/carts',cartsRouter)
 app.use('/api/chat',messagesRouter)
 app.use('/api/sessions',sessionsRouter)
