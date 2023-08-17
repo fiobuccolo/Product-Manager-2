@@ -7,8 +7,7 @@ export default class ProductManager {
         ProductManager.#instance = this;
     }
 
-    async paginateProducts(limit,page, filter,sort){
-    
+    async paginateProducts(limit,page, filter,sort){ 
          const producs = productModel.paginate(filter,{ page, limit, sort, lean:true}); 
       console.log(`desde el managerproducs`)
       return producs
@@ -19,9 +18,11 @@ export default class ProductManager {
     }   
 
     async getProductoById(id){
-             const ProductExist = productModel.findById(id).lean()
-            console.log(ProductExist)
-             return ProductExist ? ProductExist : "No existe ese id de producto" 
+            const product = await productModel.findOne({_id: id});
+            if(!product) {
+                return ({message: "Product not found"});
+            }
+            return product
         } 
 
 
